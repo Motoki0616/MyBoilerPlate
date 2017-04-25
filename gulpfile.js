@@ -1,43 +1,38 @@
 var gulp = require('gulp');
 var uglify = require('gulp-uglify');
+var sass = require('gulp-ruby-sass');
+var plumber = require('gulp-plumber');
 var livereload = require('gulp-livereload');
-var sass = require('gulp-sass');
-var autoprefixer = require('gulp-autoprefixer');
-var concat = require("gulp-concat");
-var plumber = require("gulp-plumber");
 
-gulp.task('sass', function () {
-  gulp.src('/Applications/MAMP/htdocs/MyBlog/sass/**/*.scss')
-    .pipe(sourcemaps.init())
-        .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
-        .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 7', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
-    .pipe(gulp.dest('/Applications/MAMP/htdocs/MyBlog/css'));
+// Scripts task
+// Uglifies
+gulp.task('scripts', function(){
+    gulp.src('js/*.js')
+        .pipe(plumber())
+        .pipe(uglify())
+        .pipe(gulp.dest('build/js'));
 });
 
-gulp.task('default', function(){
+// Style task
+// Uglifies
+gulp.task('styles', function(){
+    sass('scss/**/*.scss', {
+        style: 'compressed'
+    })
+    .pipe(plumber())
+    .pipe(gulp.dest('css'))
+    .pipe(livereload());
+});
+
+// Watch task
+// Watches Js
+gulp.task('watch', function(){
     livereload.listen();
-    gulp.watch(['/Applications/MAMP/htdocs/MyBlog/js/*.js'], ['js']);
-    gulp.watch('/Applications/MAMP/htdocs/MyBlog/sass/**/*.scss', ['sass']);
-    gulp.watch(['/Applications/MAMP/htdocs/MyBlog/css/style.css'], function (files){
+    gulp.watch('js/*.js', ['scripts']);
+    gulp.watch('scss/**/*.scss', ['styles']);
+    gulp.watch(['css/style.css'], function (files){
         livereload.changed(files);
     });
 });
 
-
-gulp.task('js.concat', function() {
-  return gulp.src('/Applications/MAMP/htdocs/MyBlog/js/*.js')
-    .pipe(plumber())
-    .pipe(concat('main.js'))
-    .pipe(gulp.dest('/Applications/MAMP/htdocs/MyBlog/js'));
-});
-gulp.task('js.uglify', function() {
-  return gulp.src('/Applications/MAMP/htdocs/MyBlog/js/main.js')
-    .pipe(plumber())
-    .pipe(uglify({
-      preserveComments: 'some'
-    }))
-    .pipe(gulp.dest('/Applications/MAMP/htdocs/MyBlog/js/'));
-});
-
-
-gulp.task('js', ['js.concat', 'js.uglify']);
+gulp.task('default', ['scripts', 'styles', 'watch']);
