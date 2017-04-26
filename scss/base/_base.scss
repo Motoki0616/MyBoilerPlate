@@ -14,16 +14,6 @@ body {
 	color: $color-text;
 	font-size: 62.5%;
 }
-#wrapper {
-	margin: 0;
-	padding: 0;
-	overflow: hidden;
-	letter-spacing: $letter-space;
-	line-height: $base__line;
-}
-#contents {
-	margin-left: 80px;
-}
 .main-contents {
 	width: 80%;
 	margin: 0 auto;

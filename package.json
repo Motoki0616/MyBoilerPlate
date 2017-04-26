@@ -18,6 +18,8 @@
   "homepage": "https://github.com/Motoki0616/MyBoilerPlate#readme",
   "devDependencies": {
     "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-imagemin": "^3.2.0",
     "gulp-livereload": "^3.8.1",
     "gulp-plumber": "^1.1.0",
     "gulp-ruby-sass": "^2.1.1",
